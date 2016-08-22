@@ -21,8 +21,12 @@ module.exports = {
       {
         test: /\.elm$/,
         exclude: [/elm-stuff/, /node_modules/],
-        loader: '../../index.js'
-      }
+        loader: 'elm'
+      },
+        {
+            test: /\.s[ac]ss$/,
+            loader: 'style!css!sass'
+        }
     ],
 
     noParse: /\.elm$/
