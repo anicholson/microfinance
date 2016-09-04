@@ -1,32 +1,15 @@
 module Main  exposing (..)
 
 import Http exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (class, type')
-import Html.Events exposing (onClick, onInput)
 import Dict
 import Navigation
+import Hop.Matchers exposing (..)
 import Hop exposing (makeUrl, makeUrlFromLocation, matchUrl, setQuery)
 import Hop.Types exposing (Config, Query, Location, PathMatcher, Router)
+import Task
 
-
---Hop.Matchers exposes functions for building route matchers
-
-import Hop.Matchers exposing (..)
-
-
--- ROUTES
-
-
-{-|
-Define your routes as union types
-You need to provide a route for when the current URL doesn't match any known route i.e. NotFoundRoute
--}
-type Route
-    = LoanRoute
-    | ThanksRoute
-    | NotFoundRoute
-
+import Model exposing (..)
+import Views exposing (..)
 
 {-|
 Define matchers
@@ -54,25 +37,6 @@ routerConfig =
   , notFound = NotFoundRoute
   }
 
-type alias Loan =
-  { name : String
-  , amount: Float
-  }
-
-type Msg
-  = NavigateTo String
-  | SetQuery Query
-  | LoanUrl String
-  | KivaFail Http.Error
-  | LoanInfo Loan
-
-type alias Model =
-    { location : Location
-    , route : Route
-    , loanUrl: Maybe String
-    , loanInfo : Maybe Loan
-    }
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case (Debug.log "msg" msg) of
@@ -93,17 +57,14 @@ update msg model =
         in
           ( model, command )
     LoanUrl url ->
-      ( { model | loanUrl = Just url }, LoanInfo stubLoan )
+      ( { model | loanUrl = Just url }, fetchLoan url )
     LoanInfo loan ->
       ( { model | loanInfo = Just loan}, Cmd.none )
     KivaFail error ->
       ( model, Cmd.none )
 
-fetchLoan : Cmd a  ->  Cmd Msg
-fetchLoan url =
-  let thing = \x ->  stubLoan
-  in
-    Cmd.map thing url
+fetchLoan : String -> Cmd Msg
+fetchLoan url = Task.perform KivaFail LoanInfo (Task.succeed stubLoan)
 
 stubLoan : Loan
 stubLoan = { name = "Stub Loan", amount = 0.00 }
@@ -117,58 +78,6 @@ urlUpdate : ( Route, Hop.Types.Location ) -> Model -> ( Model, Cmd Msg )
 urlUpdate ( route, location ) model =
   ( { model | route = route, location = location }, Cmd.none )
 
-view : Model -> Html Msg
-view model =
-  div []
-      [ menu model
-      , pageView model
-      ]
-
-menu : Model -> Html Msg
-menu model =
-  div []
-      [ div []
-          [ button
-              [ class "btnLoan"
-              , onClick (NavigateTo "")
-              ]
-              [ text "Loan" ]
-          ]
-      ]
-
-pageView : Model -> Html Msg
-pageView model =
-  case model.route of
-    LoanRoute ->
-      loanPage model
-    ThanksRoute ->
-      div [  class "title" ] [ text "Thanks!" ]
-    NotFoundRoute ->
-      div [ class "title" ] [ text "not found" ]
-
-
-loanPage : Model -> Html Msg
-loanPage model =
-  div [ class "columns"] [
-         div [ class "column is-one-third"] [ dataEntry ]
-        , div [ class "column is-two-thirds"] [ loanPanel model ]]
-
-
-dataEntry : Html Msg
-dataEntry = article [ class "messsage" ] [
-             div [ class "message-header" ] [ text "Add a new loan"]
-            , div [ class "message-body" ] [
-                     p [] [text "Go to the page for the Kiva loan you just made, and copy the URL. Paste that URL into the form below:"]
-                    ,p [class "control" ] [
-                          input [ class "input", type' "text",  onInput LoanUrl] []]]]
-
-loanPanel : Model -> Html Msg
-loanPanel model =
-  case model.loanUrl of
-    Just url ->
-      div [ ] [ text "Loan info will show up here." ]
-    Nothing ->
-      div [ class "is-hidden" ] [ text "" ]
 
 init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
 init ( route, location ) =
