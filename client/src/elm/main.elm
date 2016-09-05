@@ -7,6 +7,7 @@ import Hop.Matchers exposing (..)
 import Hop exposing (makeUrl, makeUrlFromLocation, matchUrl, setQuery)
 import Hop.Types exposing (Config, Query, Location, PathMatcher, Router)
 import Task
+import String
 
 import Model exposing (..)
 import Views exposing (..)
@@ -57,14 +58,18 @@ update msg model =
         in
           ( model, command )
     LoanUrl url ->
-      ( { model | loanUrl = Just url }, fetchLoan url )
+      if String.isEmpty url then
+        ( { model | loanUrl = Nothing, loanInfo = Nothing }, Cmd.none )
+      else
+        ( { model | loanUrl = Just url }, fetchLoan url )
     LoanInfo loan ->
       ( { model | loanInfo = Just loan}, Cmd.none )
     KivaFail error ->
       ( model, Cmd.none )
 
 fetchLoan : String -> Cmd Msg
-fetchLoan url = Task.perform KivaFail LoanInfo (Task.succeed stubLoan)
+fetchLoan  url =
+  Task.perform KivaFail LoanInfo (Task.succeed stubLoan)
 
 stubLoan : Loan
 stubLoan = { name = "Stub Loan", amount = 0.00 }
