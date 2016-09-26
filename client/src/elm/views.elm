@@ -9,8 +9,6 @@ import Hop.Types exposing (Config, Query, Location, PathMatcher, Router)
 
 {-|-}
 
-lol = 1
-
 view : Model -> Html Msg
 view model =
   div []
@@ -64,6 +62,7 @@ loanPanel model =
                    div [ class "message-header" ] [ text "Loan Info" ]
                   , div [ class "message-body" ] [
                            p [] [ text loan.name ]
+                          ,p [] [ text (toString loan.amount) ]
                           ]
                   ]
       Nothing ->
