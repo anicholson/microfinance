@@ -1,4 +1,4 @@
-module Main  exposing (..)
+port module Main  exposing (..)
 
 import Http exposing (..)
 import Dict
@@ -11,6 +11,14 @@ import String
 
 import Model exposing (..)
 import Views exposing (..)
+import Json.Decode exposing (Decoder, string)
+
+
+port kivaApiToken : (String -> msg) -> Sub msg
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+  kivaApiToken ApiTokenProvided
 
 {-|
 Define matchers
@@ -48,6 +56,7 @@ update msg model =
                   |> Navigation.newUrl
       in
         ( model, command )
+    ApiTokenProvided token -> ({ model | apiToken = Just token }, Cmd.none)
     SetQuery query ->
       let
         command =
@@ -72,7 +81,13 @@ fetchLoan  url =
   Task.perform KivaFail LoanInfo (Task.succeed stubLoan)
 
 stubLoan : Loan
-stubLoan = { name = "Stub Loan", amount = 0.00 }
+stubLoan = { name = "Stub Loan"
+           , amount = 0
+           , description = "Loan description"
+           , activity = Just "Lounging"
+           , sector = Just "Couch"
+           , status = "Funded"
+           , use = Just "Chips and Soft Drink" }
 
 urlParser : Navigation.Parser ( Route, Hop.Types.Location )
 urlParser =
@@ -86,7 +101,7 @@ urlUpdate ( route, location ) model =
 
 init : ( Route, Hop.Types.Location ) -> ( Model, Cmd Msg )
 init ( route, location ) =
-  ( { location = location,  route = route, loanUrl =  Nothing, loanInfo =  Nothing }, Cmd.none )
+  ( { location = location,  route = route, loanUrl =  Nothing, loanInfo =  Nothing, apiToken = Nothing}, Cmd.none )
 
 main : Program Never
 main =
@@ -95,5 +110,5 @@ main =
               , view = view
               , update = update
               , urlUpdate = urlUpdate
-              , subscriptions = ( always Sub.none)
+              , subscriptions = subscriptions
               }

@@ -8,5 +8,14 @@
   <body>
     <div id="main" class="container"></div>
     <script src="index.js"></script>
+    <script>
+      if(!window.Kiva) {
+        window.Kiva = {};
+      }
+
+      window.Kiva.tokens = {
+        access: "<%= access_token %>"
+      }
+    </script>
   </body>
 </html>

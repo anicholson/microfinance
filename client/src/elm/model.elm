@@ -23,11 +23,17 @@ type Route
 
 type alias Loan =
   { name : String
-  , amount: Float
+  , amount : Int
+  , description : String
+  , activity: Maybe String
+  , sector : Maybe String
+  , use : Maybe String
+  , status : String
   }
 
 type Msg
   = NavigateTo String
+  | ApiTokenProvided String
   | SetQuery Query
   | LoanUrl String
   | KivaFail Http.Error
@@ -38,4 +44,5 @@ type alias Model =
   , route : Route
   , loanUrl: Maybe String
   , loanInfo : Maybe Loan
+  , apiToken : Maybe String
   }

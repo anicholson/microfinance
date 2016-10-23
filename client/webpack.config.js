@@ -14,9 +14,9 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.html$/,
+        test: /index.html$/,
         exclude: /node_modules/,
-        loader: 'file?name=[name].[ext]'
+        loader: 'file?name=[name].ecr'
       },
       {
         test: /\.elm$/,

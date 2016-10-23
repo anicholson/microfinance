@@ -11,22 +11,10 @@ import Hop.Types exposing (Config, Query, Location, PathMatcher, Router)
 
 view : Model -> Html Msg
 view model =
-  div []
-      [ menu model
-      , pageView model
-      ]
-
-menu : Model -> Html Msg
-menu model =
-  div []
-      [ div []
-          [ button
-              [ class "btnLoan"
-              , onClick (NavigateTo "")
-              ]
-              [ text "Loan" ]
-          ]
-      ]
+  case model.apiToken of
+    Nothing -> div [] []
+    otherwise ->
+      div [] [ pageView model ]
 
 pageView : Model -> Html Msg
 pageView model =
