@@ -1,2 +1,4 @@
-require "spec"
-require "../src/microfinance"
+require "spec2"
+include Spec2::GlobalDSL
+
+require "../src/environment.cr"
