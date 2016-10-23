@@ -2,7 +2,7 @@ version: 1.0
 shards:
   kemal:
     github: sdogruyol/kemal
-    commit: 55367a96fc77e8788d3b35c0065acd1afd4f37b0
+    commit: 7c8915bfa4c10f98e065315816a2f689cc78d945
 
   kilt:
     github: jeromegn/kilt
@@ -10,5 +10,9 @@ shards:
 
   radix:
     github: luislavena/radix
-    version: 0.3.0
+    version: 0.3.1
+
+  spec2:
+    github: waterlink/spec2.cr
+    version: 0.9.0
 
