@@ -24,7 +24,7 @@ COPY . $WORKDIR
 
 WORKDIR $WORKDIR/server
 
-# RUN shards install
+RUN shards install
 
 RUN crystal build src/microfinance.cr
 
@@ -40,4 +40,4 @@ RUN source $NVM_DIR/nvm.sh && \
 
 WORKDIR $WORKDIR/server
 
-#ENTRYPOINT ./microfinance
+ENTRYPOINT ./microfinance
