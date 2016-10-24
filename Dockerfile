@@ -22,12 +22,6 @@ RUN source $NVM_DIR/nvm.sh && \
 
 COPY . $WORKDIR
 
-WORKDIR $WORKDIR/server
-
-RUN shards install
-
-RUN crystal build src/microfinance.cr
-
 WORKDIR $WORKDIR/client
 
 RUN source $NVM_DIR/nvm.sh && \
@@ -39,5 +33,8 @@ RUN source $NVM_DIR/nvm.sh && \
     rm -rf node_modules
 
 WORKDIR $WORKDIR/server
+
+RUN shards install
+RUN crystal build src/microfinance.cr
 
 ENTRYPOINT ./microfinance
