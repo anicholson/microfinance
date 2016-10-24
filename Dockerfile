@@ -37,4 +37,8 @@ WORKDIR $WORKDIR/server
 RUN shards install
 RUN crystal build src/microfinance.cr
 
-ENTRYPOINT ./microfinance
+ENV PORT 80
+
+EXPOSE 80
+
+ENTRYPOINT ./microfinance -p 80
