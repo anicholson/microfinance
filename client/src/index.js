@@ -1,7 +1,7 @@
 require("./index.html");
 require("bulma/bulma.sass");
 
-var Elm = require("./elm/main.elm");
+var Elm = require("./elm/Main.elm");
 
 var Main = Elm.Main;
 
