@@ -1,0 +1,15 @@
+<% content_for "page_scripts" do %>
+  <script src="/static.js"></script>
+<% end %>
+
+<% content_for "page" do %>
+<form method="POST" action="/authorize/step/2">
+  <formgroup>
+  <label for="kiva_auth_token">
+    <p>Enter the Kiva Auth Token</p>
+    <input name="kiva_auth_token" />
+  </label>
+  </formgroup>
+  <button type="submit" />
+</form>
+<% end %>

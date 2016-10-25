@@ -1,21 +1,12 @@
-<?xml version="1.0"?>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>elm-webpack-loader example</title>
-  </head>
-  <body>
-    <div id="main" class="container"></div>
-    <script src="index.js"></script>
-    <script>
-      if(!window.Kiva) {
-        window.Kiva = {};
-      }
+<% content_for "page_scripts" do %>
+<script src="index.js"></script>
+<script>
+  if(!window.Kiva) {
+    window.Kiva = {};
+  }
 
-      window.Kiva.tokens = {
-        access: "<%= access_token %>"
-      }
-    </script>
-  </body>
-</html>
+  window.Kiva.tokens = {
+    access: "<%= access_token %>"
+  }
+</script>
+<% end %>

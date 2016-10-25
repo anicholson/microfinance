@@ -1,9 +1,12 @@
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    index: "./src/index.js",
+    static: "./src/static.js"
+  },
 
   output: {
     path: './dist',
-    filename: 'index.js'
+    filename: '[name].js'
   },
 
   resolve: {
@@ -14,7 +17,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /index.html$/,
+        test: /.html$/,
         exclude: /node_modules/,
         loader: 'file?name=[name].ecr'
       },

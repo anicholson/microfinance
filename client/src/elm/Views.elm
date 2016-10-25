@@ -1,4 +1,4 @@
-module Views exposing (..)
+module Views exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, type')
@@ -48,10 +48,7 @@ loanPanel model =
       Just loan ->
         article [ class "message" ] [
                    div [ class "message-header" ] [ text "Loan Info" ]
-                  , div [ class "message-body" ] [
-                           p [] [ text loan.name ]
-                          ,p [] [ text (toString loan.amount) ]
-                          ]
+                  , div [ class "message-body" ]  [ loanInfoDisplay loan ]
                   ]
       Nothing ->
         case model.loanUrl of
@@ -59,3 +56,22 @@ loanPanel model =
             div [ ] [ text "Loan info will show up here." ]
           Nothing ->
             div [ class "is-hidden" ] [ text "" ]
+
+coercedString : Maybe String -> String
+coercedString s = Maybe.withDefault "" s
+
+loanInfoDisplay : Loan -> Html Msg
+loanInfoDisplay loan =
+  let
+    activity = coercedString loan.activity
+    sector   = coercedString loan.sector
+    use      = coercedString loan.use
+  in
+    div [] [
+            p [] [ text loan.name ]
+          , p [] [ text loan.description ]
+          , p [] [ text activity ]
+          , p [] [ text sector ]
+          , p [] [ text use ]
+          , p [] [ text (toString loan.amount) ]
+          ]

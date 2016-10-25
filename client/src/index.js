@@ -1,4 +1,6 @@
 require("./index.html");
+require("./layout.html");
+require("./authorize_step_2.html");
 require("bulma/bulma.sass");
 
 var Elm = require("./elm/Main.elm");
